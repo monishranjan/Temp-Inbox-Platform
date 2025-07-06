@@ -1,62 +1,84 @@
+'use client';
+
 import Link from "next/link";
-// import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Mail, Phone, Shield, Clock } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col text-text font-burnr" style={{
-      backgroundImage: "linear-gradient(135deg, #e5f2ff, #fff, #e6ccff)"
-    }}>
-      {/* Sticky Header */}
+    <main
+      className="min-h-screen flex flex-col text-text font-burnr"
+      style={{
+        backgroundImage: "linear-gradient(135deg, #e5f2ff, #fff, #e6ccff)"
+      }}
+    >
+      {/* Header */}
       <Header />
 
-      {/* Main content */}
+      {/* Hero Section */}
       <section className="flex flex-col items-center text-center px-4 py-16">
-        <div className="">
-          <h1 className="text-5xl font-light text-text">Temporary</h1>
-          <h1 className="rounded-xl text-6xl font-bold text-primary my-1">Email & Phone</h1>
-          <h1 className="text-3xl font-light text-gray-400">Made Simple</h1>
+        <div className="space-y-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-light text-text">Temporary</h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">Email & Phone</h1>
+          <h1 className="text-xl sm:text-2xl font-light text-gray-400">Made Simple</h1>
         </div>
 
-        <div className="description my-10">
-          <p className="text-lg text-text-muted">Protect your privacy with disposable email addresses and phone numbers. <br /> No registration required, instant access, completely free.</p>
-        </div>
+        <p className="text-base sm:text-lg text-text-muted mt-6">
+          Protect your privacy with disposable email addresses and phone numbers.
+          <br className="hidden sm:block" />
+          No registration required, instant access, completely free.
+        </p>
 
-        <div className="buttons flex flex-col sm:flex-row gap-6 mt-4">
-          {/* Filled Button */}
-          <Link href="/temp-email" className="filledButton flex gap-3 bg-primary text-surface px-10 py-3 rounded-xl shadow-lg items-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 mt-10">
+          <Link
+            href="/temp-email"
+            className="flex gap-3 bg-primary text-surface px-8 py-3 rounded-xl shadow-lg items-center justify-center transition-transform hover:-translate-y-1 hover:shadow-xl"
+          >
             <Mail strokeWidth={1.5} />
-            <h1 className="font-normal text-lg">Get a Temp Email</h1>
+            <span className="text-lg font-medium">Get a Temp Email</span>
           </Link>
 
-          {/* Outlined Button */}
-          <Link href="/temp-number" className="outlinedButton flex gap-3 border-2 border-primary bg-surface text-primary px-10 py-3 rounded-xl shadow-lg items-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+          <Link
+            href="/temp-number"
+            className="flex gap-3 border-2 border-primary bg-surface text-primary px-8 py-3 rounded-xl shadow-lg items-center justify-center transition-transform hover:-translate-y-1 hover:shadow-xl"
+          >
             <Phone strokeWidth={1.5} />
-            <h1 className="font-normal text-lg">Get a Temp Number</h1>
+            <span className="text-lg font-medium">Get a Temp Number</span>
           </Link>
         </div>
 
-        <div className="flex gap-8 mt-20">
-          <div className="card1 flex flex-col items-center bg-surface py-10 px-10 rounded-xl shadow-sm">
-            <Shield size={48} className="text-primary mb-4"/>
-            <h1 className="text-text font-semibold text-lg mb-3">Privacy First</h1>
-            <p className="text-text-muted text-base leading-snug">Your real information stays <br />completely private and secure</p>
+        {/* Feature Cards */}
+        <div className="grid grid- lg:grid-cols-3 gap-6 mt-20 w-full max-w-6xl px-4">
+          <div className="bg-surface py-10 px-6 sm:px-8 rounded-xl shadow-md text-center flex flex-col items-center">
+            <Shield size={48} className="text-primary mb-4" />
+            <h2 className="text-lg font-semibold mb-2 text-text">Privacy First</h2>
+            <p className="text-text-muted text-sm">
+              Your real information stays completely private and secure.
+            </p>
           </div>
-          <div className="card2 flex flex-col items-center bg-surface py-10 px-10 rounded-xl shadow-sm">
-            <Clock size={48} className="text-primary mb-4"/>
-            <h1 className="text-text font-semibold text-lg mb-3">Instant Access</h1>
-            <p className="text-text-muted text-base leading-snug">Get temporary contacts <br />immediately, no waiting or <br /> setup</p>
+
+          <div className="bg-surface py-10 px-6 sm:px-8 rounded-xl shadow-md text-center flex flex-col items-center">
+            <Clock size={48} className="text-primary mb-4" />
+            <h2 className="text-lg font-semibold mb-2 text-text">Instant Access</h2>
+            <p className="text-text-muted text-sm">
+              Get temporary contacts immediately. No waiting or setup needed.
+            </p>
           </div>
-          <div className="card3 flex flex-col items-center bg-surface py-10 px-10 rounded-xl shadow-sm">
-            <Mail size={48} className="text-primary mb-4"/>
-            <h1 className="text-text font-semibold text-lg mb-3">Privacy First</h1>
-            <p className="text-text-muted text-base leading-snug">No hidden costs, premium <br />features, or subscription <br />required.</p>
+
+          <div className="bg-surface py-10 px-6 sm:px-8 rounded-xl shadow-md text-center flex flex-col items-center">
+            <Mail size={48} className="text-primary mb-4" />
+            <h2 className="text-lg font-semibold mb-2 text-text">Completely Free</h2>
+            <p className="text-text-muted text-sm">
+              No hidden costs, subscriptions, or premium features required.
+            </p>
           </div>
         </div>
-
-        {/* <Footer /> */}
       </section>
+
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }
