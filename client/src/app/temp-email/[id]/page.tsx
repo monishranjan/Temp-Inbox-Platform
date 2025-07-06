@@ -1,48 +1,67 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
-import { MailOpen, ClipboardCopy, ArrowLeft, Copy, RefreshCcw } from 'lucide-react';
+import { MailOpen, Copy, ArrowLeft, RefreshCcw } from 'lucide-react';
+
+type Message = {
+  id: string;
+  subject: string;
+  from: { address: string };
+  intro: string;
+  createdAt: string;
+};
+
+type EmailData = {
+  _id: string;
+  email: string;
+};
 
 export default function InboxPage() {
-  const params = useParams();
+  const { id } = useParams() as { id: string };
   const router = useRouter();
-  const { id } = params as { id: string };
-  const [emailData, setEmailData] = useState<any>(null);
-  const [messages, setMessages] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  const fetchInbox = async () => {
+  const [emailData, setEmailData] = useState<EmailData | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchInbox = useCallback(async () => {
     try {
+      setError(null);
       const res = await fetch(`https://burnr-backend.onrender.com/api/emails/${id}/inbox`);
       const data = await res.json();
       setMessages(data['hydra:member'] || []);
     } catch (err) {
-      console.error('Failed to fetch inbox:', err);
+      setError('Failed to fetch inbox.');
+      console.error('Inbox fetch error:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  const fetchEmailData = useCallback(async () => {
+    try {
+      const res = await fetch(`https://burnr-backend.onrender.com/api/emails`);
+      const data: EmailData[] = await res.json();
+      const found = data.find(e => e._id === id);
+      setEmailData(found || null);
+    } catch (err) {
+      console.error('Failed to fetch email metadata:', err);
+    }
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;
-
-    // Get email details
-    fetch(`https://burnr-backend.onrender.com/api/emails`)
-      .then(res => res.json())
-      .then(data => {
-        const found = data.find((e: any) => e._id === id);
-        setEmailData(found || null);
-      });
-
+    fetchEmailData();
     fetchInbox();
-  }, [id]);
+  }, [id, fetchInbox, fetchEmailData]);
 
   const handleCopy = () => {
     if (emailData?.email) {
       navigator.clipboard.writeText(emailData.email);
-      alert("Email copied to clipboard!");
+      alert('Email copied to clipboard!');
     }
   };
 
@@ -95,9 +114,11 @@ export default function InboxPage() {
           )}
         </div>
 
-        {/* Inbox Messages */}
+        {/* Messages */}
         {loading ? (
           <p className="text-center text-text-muted">Loading emails...</p>
+        ) : error ? (
+          <p className="text-center text-red-500">{error}</p>
         ) : messages.length === 0 ? (
           <p className="text-center text-text-muted">No messages found.</p>
         ) : (
@@ -138,8 +159,8 @@ export default function InboxPage() {
   );
 }
 
-// Utility function for "x min ago"
-function formatTimeAgo(isoDate: string) {
+// Time formatter
+function formatTimeAgo(isoDate: string): string {
   const diff = Date.now() - new Date(isoDate).getTime();
   const sec = Math.floor(diff / 1000);
   if (sec < 60) return 'Just now';
