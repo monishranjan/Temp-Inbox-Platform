@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import { MailOpen, Copy, ArrowLeft, RefreshCcw } from 'lucide-react';
+import Footer from '@/components/Footer';
 
 type Message = {
   id: string;
@@ -155,6 +156,8 @@ export default function InboxPage() {
           ⚠️ Emails are automatically deleted after 24 hours.
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }

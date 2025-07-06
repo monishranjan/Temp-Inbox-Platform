@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import { useEffect, useState } from 'react';
 import { ClipboardCopy, Inbox } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Footer from '@/components/Footer';
 
 type EmailEntry = {
   _id: string;
@@ -53,14 +54,14 @@ export default function TempEmailPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center bg-background text-text font-burnr">
+    <main className="min-h-screen flex flex-col bg-background text-text font-burnr">
       <Header />
 
-      <section className="w-full max-w-4xl px-4 py-12">
+      <section className="w-full px-4 py-12 max-w-6xl mx-auto">
         <div className="text-center mb-10">
-          <h1 className="text-text-muted font-normal text-2xl">Your Temporary</h1>
-          <h1 className="text-4xl font-semibold text-primary">Email Addresses</h1>
-          <p className="text-text-muted mt-3 text-lg">
+          <h1 className="text-text-muted text-xl sm:text-2xl font-normal">Your Temporary</h1>
+          <h1 className="text-3xl sm:text-4xl font-semibold text-primary">Email Addresses</h1>
+          <p className="text-text-muted mt-3 text-base sm:text-lg">
             Select an email address to view messages or copy to use elsewhere.
           </p>
         </div>
@@ -80,19 +81,19 @@ export default function TempEmailPage() {
               return (
                 <div
                   key={_id}
-                  className="bg-surface rounded-xl shadow-lg p-6 flex flex-col sm:flex-row items-center justify-between gap-6"
+                  className="bg-surface rounded-xl shadow-lg p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8"
                 >
-                  {/* Left side */}
-                  <div className="flex flex-col items-start">
-                    <h2 className="text-xl font-medium mb-1">Burnr Email</h2>
-                    <p className="text-lg text-primary mb-2 select-all">
+                  {/* Left side - Email + Buttons */}
+                  <div className="w-full sm:w-1/2 flex flex-col gap-3">
+                    <h2 className="text-lg sm:text-xl font-medium text-text">Burnr Email</h2>
+                    <p className="text-lg text-primary select-all break-all">
                       {isRevealed ? email : maskEmail(email)}
                     </p>
 
                     {!isRevealed && (
                       <button
                         onClick={() => toggleReveal(_id)}
-                        className="text-base text-text-muted hover:underline hover:text-primary hover:font-medium mb-2"
+                        className="text-sm text-left text-text-muted hover:underline hover:text-primary "
                       >
                         👁️ Reveal Email
                       </button>
@@ -100,15 +101,15 @@ export default function TempEmailPage() {
 
                     <button
                       onClick={() => handleCopy(email)}
-                      className="bg-primary text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-primary-dark transition"
+                      className="bg-primary text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:bg-primary-dark transition w-fit"
                     >
                       <ClipboardCopy size={16} />
                       Copy Email
                     </button>
                   </div>
 
-                  {/* Right side */}
-                  <div className="text-sm text-text-muted space-y-2 text-right sm:text-left">
+                  {/* Right side - Stats + Inbox Button */}
+                  <div className="w-full sm:w-1/2 flex flex-col gap-2 text-sm text-text-muted text-left sm:text-right">
                     <p>
                       📥 Total Messages:{' '}
                       <span className="font-medium text-text">{messageCount || 0}</span>
@@ -119,13 +120,15 @@ export default function TempEmailPage() {
                         {formatTimeAgo(lastActive)}
                       </span>
                     </p>
-                    <button
-                      onClick={() => handleViewInbox(_id)}
-                      className="mt-3 inline-flex items-center gap-2 text-sm px-4 py-2 border border-primary rounded-md text-primary hover:bg-accent hover:text-text transition"
-                    >
-                      <Inbox size={16} />
-                      View Inbox
-                    </button>
+                    <div className="mt-2 sm:mt-4">
+                      <button
+                        onClick={() => handleViewInbox(_id)}
+                        className="inline-flex items-center gap-2 text-sm px-4 py-2 border border-primary rounded-md text-primary hover:bg-accent hover:text-text transition w-fit"
+                      >
+                        <Inbox size={16} />
+                        View Inbox
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -133,6 +136,8 @@ export default function TempEmailPage() {
           </div>
         )}
       </section>
+
+      <Footer />
     </main>
   );
 }

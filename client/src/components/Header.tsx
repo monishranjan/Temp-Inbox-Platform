@@ -1,64 +1,90 @@
 'use client';
 
 import Link from "next/link";
-import { Mail, Phone, Home as HomeIcon } from "lucide-react";
+import { Mail, Phone, Home as HomeIcon, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export default function Header() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isHomePage = pathname === "/";
-  const isEmailPage = pathname === "/temp-email";
-  const isPhonePage = pathname === "/temp-number";
+  const navLinks = [
+    {
+      label: "Home",
+      href: "/",
+      icon: <HomeIcon size={20} />,
+      isActive: pathname === "/",
+    },
+    {
+      label: "Temp Email",
+      href: "/temp-email",
+      icon: <Mail size={20} />,
+      isActive: pathname === "/temp-email",
+    },
+    {
+      label: "Temp Phone",
+      href: "/temp-number",
+      icon: <Phone size={20} />,
+      isActive: pathname === "/temp-number",
+    },
+  ];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-surface opacity-90 shadow-sm backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         {/* Brand */}
-        <h1 className="font-bold text-2xl text-primary">Burnr</h1>
+        <Link href="/" className="font-bold text-2xl text-primary">Burnr</Link>
 
-        {/* Navigation */}
-        <nav className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-8">
-          {/* Home */}
-          <Link
-            href="/"
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition w-full sm:w-auto justify-center
-              ${isHomePage
-                ? "bg-accent text-text font-medium"
-                : "text-text-muted hover:bg-accent hover:text-text"}
-            `}
-          >
-            <HomeIcon size={20} strokeWidth={2} />
-            <span className="text-base hidden sm:inline">Home</span>
-          </Link>
-
-          {/* Temp Email */}
-          <Link
-            href="/temp-email"
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition w-full sm:w-auto justify-center
-              ${isEmailPage
-                ? "bg-accent text-text font-medium"
-                : "text-text-muted hover:bg-accent hover:text-text"}
-            `}
-          >
-            <Mail size={20} strokeWidth={2} />
-            <span className="text-base hidden sm:inline">Temp Email</span>
-          </Link>
-
-          {/* Temp Phone */}
-          <Link
-            href="/temp-number"
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition w-full sm:w-auto justify-center
-              ${isPhonePage
-                ? "bg-accent text-text font-medium"
-                : "text-text-muted hover:bg-accent hover:text-text"}
-            `}
-          >
-            <Phone size={20} strokeWidth={2} />
-            <span className="text-base hidden sm:inline">Temp Phone</span>
-          </Link>
+        {/* Desktop Navigation */}
+        <nav className="hidden sm:flex items-center gap-6">
+          {navLinks.map(({ label, href, icon, isActive }) => (
+            <Link
+              key={label}
+              href={href}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl transition
+                ${isActive
+                  ? "bg-accent text-text font-medium"
+                  : "text-text-muted hover:bg-accent hover:text-text"}
+              `}
+            >
+              {icon}
+              <span className="text-base">{label}</span>
+            </Link>
+          ))}
         </nav>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="sm:hidden p-2 rounded-md hover:bg-accent transition"
+        >
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
+
+      {/* Mobile Dropdown Menu */}
+      {mobileMenuOpen && (
+        <div className="sm:hidden px-4 pb-4">
+          <nav className="flex flex-col gap-3 bg-surface border rounded-xl p-4 shadow-md">
+            {navLinks.map(({ label, href, icon, isActive }) => (
+              <Link
+                key={label}
+                href={href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition
+                  ${isActive
+                    ? "bg-accent text-text font-medium"
+                    : "text-text-muted hover:bg-accent hover:text-text"}
+                `}
+              >
+                {icon}
+                <span className="text-base">{label}</span>
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
