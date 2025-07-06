@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { ClipboardCopy, Inbox } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Footer from '@/components/Footer';
+import VideoAdModal from '@/components/VideoAdModal';
 
 type EmailEntry = {
   _id: string;
@@ -14,6 +15,9 @@ type EmailEntry = {
 };
 
 export default function TempEmailPage() {
+  const [afterAdAction, setAfterAdAction] = useState<() => void>(() => () => { });
+  const [showAd, setShowAd] = useState(false);
+  // const [pendingInboxId, setPendingInboxId] = useState<string | null>(null);
   const [emails, setEmails] = useState<EmailEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -44,8 +48,10 @@ export default function TempEmailPage() {
   };
 
   const handleViewInbox = (id: string) => {
-    router.push(`/temp-email/${id}`);
+    setPendingInboxId(id);
+    setShowAd(true);
   };
+
 
   const toggleReveal = (id: string) => {
     setRevealedIds((prev) =>
@@ -92,7 +98,10 @@ export default function TempEmailPage() {
 
                     {!isRevealed && (
                       <button
-                        onClick={() => toggleReveal(_id)}
+                        onClick={() => {
+                          setAfterAdAction(() => () => toggleReveal(_id));
+                          setShowAd(true);
+                        }}
                         className="text-sm text-left text-text-muted hover:underline hover:text-primary "
                       >
                         👁️ Reveal Email
@@ -122,7 +131,10 @@ export default function TempEmailPage() {
                     </p>
                     <div className="mt-2 sm:mt-4">
                       <button
-                        onClick={() => handleViewInbox(_id)}
+                        onClick={() => {
+                          setAfterAdAction(() => () => router.push(`/temp-email/${_id}`));
+                          setShowAd(true);
+                        }}
                         className="inline-flex items-center gap-2 text-sm px-4 py-2 border border-primary rounded-md text-primary hover:bg-accent hover:text-text transition w-fit"
                       >
                         <Inbox size={16} />
@@ -136,6 +148,20 @@ export default function TempEmailPage() {
           </div>
         )}
       </section>
+
+      <VideoAdModal
+        isOpen={showAd}
+        onClose={() => {
+          setShowAd(false);
+          setAfterAdAction(() => () => { });
+        }}
+        onComplete={() => {
+          afterAdAction(); // ✅ This executes the stored action
+          setShowAd(false);
+          setAfterAdAction(() => () => { });
+        }}
+      />
+
 
       <Footer />
     </main>
