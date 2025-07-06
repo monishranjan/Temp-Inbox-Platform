@@ -15,7 +15,7 @@ export default function InboxPage() {
 
   const fetchInbox = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/emails/${id}/inbox`);
+      const res = await fetch(`https://burnr-backend.onrender.com/api/emails/${id}/inbox`);
       const data = await res.json();
       setMessages(data['hydra:member'] || []);
     } catch (err) {
@@ -29,7 +29,7 @@ export default function InboxPage() {
     if (!id) return;
 
     // Get email details
-    fetch(`http://localhost:5000/api/emails`)
+    fetch(`https://burnr-backend.onrender.com/api/emails`)
       .then(res => res.json())
       .then(data => {
         const found = data.find((e: any) => e._id === id);
