@@ -1,103 +1,62 @@
-import Image from "next/image";
+import Link from "next/link";
+// import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import { Mail, Phone, Shield, Clock } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="min-h-screen flex flex-col text-text font-burnr" style={{
+      backgroundImage: "linear-gradient(135deg, #e5f2ff, #fff, #e6ccff)"
+    }}>
+      {/* Sticky Header */}
+      <Header />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Main content */}
+      <section className="flex flex-col items-center text-center px-4 py-16">
+        <div className="">
+          <h1 className="text-5xl font-light text-text">Temporary</h1>
+          <h1 className="rounded-xl text-6xl font-bold text-primary my-1">Email & Phone</h1>
+          <h1 className="text-3xl font-light text-gray-400">Made Simple</h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <div className="description my-10">
+          <p className="text-lg text-text-muted">Protect your privacy with disposable email addresses and phone numbers. <br /> No registration required, instant access, completely free.</p>
+        </div>
+
+        <div className="buttons flex flex-col sm:flex-row gap-6 mt-4">
+          {/* Filled Button */}
+          <Link href="/temp-email" className="filledButton flex gap-3 bg-primary text-surface px-10 py-3 rounded-xl shadow-lg items-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+            <Mail strokeWidth={1.5} />
+            <h1 className="font-normal text-lg">Get a Temp Email</h1>
+          </Link>
+
+          {/* Outlined Button */}
+          <Link href="/temp-number" className="outlinedButton flex gap-3 border-2 border-primary bg-surface text-primary px-10 py-3 rounded-xl shadow-lg items-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+            <Phone strokeWidth={1.5} />
+            <h1 className="font-normal text-lg">Get a Temp Number</h1>
+          </Link>
+        </div>
+
+        <div className="flex gap-8 mt-20">
+          <div className="card1 flex flex-col items-center bg-surface py-10 px-10 rounded-xl shadow-sm">
+            <Shield size={48} className="text-primary mb-4"/>
+            <h1 className="text-text font-semibold text-lg mb-3">Privacy First</h1>
+            <p className="text-text-muted text-base leading-snug">Your real information stays <br />completely private and secure</p>
+          </div>
+          <div className="card2 flex flex-col items-center bg-surface py-10 px-10 rounded-xl shadow-sm">
+            <Clock size={48} className="text-primary mb-4"/>
+            <h1 className="text-text font-semibold text-lg mb-3">Instant Access</h1>
+            <p className="text-text-muted text-base leading-snug">Get temporary contacts <br />immediately, no waiting or <br /> setup</p>
+          </div>
+          <div className="card3 flex flex-col items-center bg-surface py-10 px-10 rounded-xl shadow-sm">
+            <Mail size={48} className="text-primary mb-4"/>
+            <h1 className="text-text font-semibold text-lg mb-3">Privacy First</h1>
+            <p className="text-text-muted text-base leading-snug">No hidden costs, premium <br />features, or subscription <br />required.</p>
+          </div>
+        </div>
+
+        {/* <Footer /> */}
+      </section>
+    </main>
   );
 }
