@@ -1,8 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const emailSchema = new mongoose.Schema({
-    address: { type: String, required: true, unique: true },
-    lastActivity: { type: Date, default: Date.now },
+  email: { type: String, required: true },
+  password: String,
+  token: String,
+  mailtm_id: String, // ID from mail.tm
+  messageCount: Number,
+  lastActive: Date,
 }, { timestamps: true });
 
-module.exports = mongoose.model('Email', emailSchema);
+emailSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 }); // 86400 = 24 hours
+
+module.exports = mongoose.model("Email", emailSchema);
