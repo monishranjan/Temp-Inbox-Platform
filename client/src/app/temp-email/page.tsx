@@ -47,10 +47,10 @@ export default function TempEmailPage() {
     alert('Email copied to clipboard!');
   };
 
-  const handleViewInbox = (id: string) => {
-    setPendingInboxId(id);
-    setShowAd(true);
-  };
+  // const handleViewInbox = (id: string) => {
+  //   setPendingInboxId(id);
+  //   setShowAd(true);
+  // };
 
 
   const toggleReveal = (id: string) => {
