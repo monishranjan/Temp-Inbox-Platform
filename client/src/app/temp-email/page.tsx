@@ -1,35 +1,45 @@
 'use client';
 
-import Header from "@/components/Header";
-import { useEffect, useState } from "react";
-import { ClipboardCopy, Inbox } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Header from '@/components/Header';
+import { useEffect, useState } from 'react';
+import { ClipboardCopy, Inbox } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+type EmailEntry = {
+  _id: string;
+  email: string;
+  messageCount: number;
+  lastActive: string;
+};
 
 export default function TempEmailPage() {
-  const [emails, setEmails] = useState([]);
+  const [emails, setEmails] = useState<EmailEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [revealedIds, setRevealedIds] = useState<string[]>([]);
   const router = useRouter();
 
   useEffect(() => {
-    setLoading(true);
-    fetch("https://burnr-backend.onrender.com/api/emails")
-      .then(res => res.json())
-      .then(data => {
+    const fetchEmails = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch('https://burnr-backend.onrender.com/api/emails');
+        const data: EmailEntry[] = await res.json();
         setEmails(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("❌ Failed to fetch emails:", err);
+      } catch (err) {
+        console.error('❌ Failed to fetch emails:', err);
         setError(true);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchEmails();
   }, []);
 
   const handleCopy = (email: string) => {
     navigator.clipboard.writeText(email);
-    alert("Email copied to clipboard!");
+    alert('Email copied to clipboard!');
   };
 
   const handleViewInbox = (id: string) => {
@@ -37,8 +47,8 @@ export default function TempEmailPage() {
   };
 
   const toggleReveal = (id: string) => {
-    setRevealedIds(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    setRevealedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
@@ -46,7 +56,7 @@ export default function TempEmailPage() {
     <main className="min-h-screen flex flex-col items-center bg-background text-text font-burnr">
       <Header />
 
-      <section className="w-2/4 px-4 py-12">
+      <section className="w-full max-w-4xl px-4 py-12">
         <div className="text-center mb-10">
           <h1 className="text-text-muted font-normal text-2xl">Your Temporary</h1>
           <h1 className="text-4xl font-semibold text-primary">Email Addresses</h1>
@@ -65,14 +75,14 @@ export default function TempEmailPage() {
           <p className="text-center text-text-muted text-lg">No emails found.</p>
         ) : (
           <div className="space-y-6">
-            {emails.map((emailObj: any) => {
-              const { _id, email, messageCount, lastActive } = emailObj;
+            {emails.map(({ _id, email, messageCount, lastActive }) => {
               const isRevealed = revealedIds.includes(_id);
               return (
                 <div
                   key={_id}
                   className="bg-surface rounded-xl shadow-lg p-6 flex flex-col sm:flex-row items-center justify-between gap-6"
                 >
+                  {/* Left side */}
                   <div className="flex flex-col items-start">
                     <h2 className="text-xl font-medium mb-1">Burnr Email</h2>
                     <p className="text-lg text-primary mb-2 select-all">
@@ -97,13 +107,14 @@ export default function TempEmailPage() {
                     </button>
                   </div>
 
+                  {/* Right side */}
                   <div className="text-sm text-text-muted space-y-2 text-right sm:text-left">
                     <p>
-                      📥 Total Messages:{" "}
+                      📥 Total Messages:{' '}
                       <span className="font-medium text-text">{messageCount || 0}</span>
                     </p>
                     <p>
-                      🕒 Last Activity:{" "}
+                      🕒 Last Activity:{' '}
                       <span className="font-medium text-text">
                         {formatTimeAgo(lastActive)}
                       </span>
@@ -127,21 +138,21 @@ export default function TempEmailPage() {
 }
 
 // Mask email like ab***yz@domain.com
-function maskEmail(email: string) {
-  const [name, domain] = email.split("@");
+function maskEmail(email: string): string {
+  const [name, domain] = email.split('@');
   if (!name || !domain) return email;
-  if (name.length <= 4) return `${name[0]}***@${domain}`;
+  if (name.length <= 4) return `${name[0] || '*'}***@${domain}`;
   const first = name.slice(0, 2);
   const last = name.slice(-2);
   return `${first}***${last}@${domain}`;
 }
 
 // Format ISO date to "2 min ago" etc.
-function formatTimeAgo(isoDate: string) {
-  if (!isoDate) return "N/A";
+function formatTimeAgo(isoDate: string): string {
+  if (!isoDate) return 'N/A';
   const diff = Date.now() - new Date(isoDate).getTime();
   const seconds = Math.floor(diff / 1000);
-  if (seconds < 60) return "just now";
+  if (seconds < 60) return 'just now';
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes} min ago`;
   const hours = Math.floor(minutes / 60);

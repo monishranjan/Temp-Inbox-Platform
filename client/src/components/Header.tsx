@@ -9,7 +9,7 @@ export default function Header() {
 
   const isHomePage = pathname === "/";
   const isEmailPage = pathname === "/temp-email";
-  const isPhonePage = pathname === "/phone";
+  const isPhonePage = pathname === "/temp-number";
 
   return (
     <header className="sticky top-0 z-50 w-full bg-surface opacity-90 shadow-sm backdrop-blur-md">
@@ -47,7 +47,7 @@ export default function Header() {
 
           {/* Temp Phone */}
           <Link
-            href="/phone"
+            href="/temp-number"
             className={`flex items-center gap-2 px-4 py-2 rounded-xl transition w-full sm:w-auto justify-center
               ${isPhonePage
                 ? "bg-accent text-text font-medium"
