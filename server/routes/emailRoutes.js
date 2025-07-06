@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const emails = require('../data/emailInbox');
 
-router.get("/", (req, res) => {
-    res.json(emails);
-});
+const {
+    getEmails,
+    getInbox,
+    addMessage,
+    createEmail,
+} = require('../controllers/emailController');
+
+router.get("/", getEmails);
+router.get("/:id", getInbox);
+router.post("/add", addMessage);
+router.post("/create", createEmail);
 
 module.exports = router;
