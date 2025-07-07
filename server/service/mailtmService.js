@@ -5,7 +5,9 @@ const Email = require("../models/Email");
 const BASE_URL = "https://api.mail.tm";
 
 const generateRandomString = (length = 10) => {
-  return Math.random().toString(36).substring(2, 2 + length);
+  return Math.random()
+    .toString(36)
+    .substring(2, 2 + length);
 };
 
 const createEmailAccount = async () => {
