@@ -7,9 +7,24 @@ const { createEmailAccount } = require("../service/mailtmService");
 // GET all emails from DB
 router.get("/", async (req, res) => {
   try {
-    const emails = await Email.find().sort({ createdAt: -1 });
+    let emails = await Email.find().sort({ createdAt: -1 });
 
-    // Fetch latest message counts for each email
+    // 🟡 If no emails found (possibly deleted after 24h), create 5 new ones
+    if (emails.length === 0) {
+      console.log("📭 No emails found. Creating 5 new temporary emails...");
+      const createdEmails = [];
+
+      for (let i = 0; i < 5; i++) {
+        const newEmail = await createEmailAccount();
+        if (newEmail) {
+          createdEmails.push(newEmail);
+        }
+      }
+
+      emails = await Email.find().sort({ createdAt: -1 });
+    }
+
+    // 🔄 Update each email's message count and lastActive
     const updatedEmails = await Promise.all(
       emails.map(async (emailDoc) => {
         try {
@@ -21,7 +36,6 @@ router.get("/", async (req, res) => {
 
           const count = inboxRes.data["hydra:totalItems"];
 
-          // Update count in DB if changed
           if (emailDoc.messageCount !== count) {
             emailDoc.messageCount = count;
             emailDoc.lastActive = new Date();
@@ -31,10 +45,10 @@ router.get("/", async (req, res) => {
           return emailDoc;
         } catch (err) {
           console.error(
-            `Failed to fetch inbox for ${emailDoc.email}`,
+            `⚠️ Failed to fetch inbox for ${emailDoc.email}`,
             err.message
           );
-          return emailDoc; // Still return the email doc with old data
+          return emailDoc;
         }
       })
     );
