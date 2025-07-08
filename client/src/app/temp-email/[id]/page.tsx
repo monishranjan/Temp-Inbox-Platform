@@ -72,7 +72,9 @@ export default function InboxPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-background text-text font-burnr items-center">
+    <main className="min-h-screen flex flex-col text-text font-burnr items-center" style={{
+        backgroundImage: "linear-gradient(135deg, #e5f2ff, #fff, #e6ccff)"
+      }}>
       <Header />
 
       <section className="w-full max-w-4xl px-4 py-10 space-y-8">

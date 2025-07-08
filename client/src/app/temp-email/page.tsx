@@ -60,7 +60,9 @@ export default function TempEmailPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-background text-text font-burnr">
+    <main className="min-h-screen flex flex-col text-text font-burnr" style={{
+        backgroundImage: "linear-gradient(135deg, #e5f2ff, #fff, #e6ccff)"
+      }}>
       <Header />
 
       <section className="w-full px-4 py-12 max-w-6xl mx-auto">
